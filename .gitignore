@@ -1,0 +1,9 @@
+# OS generated files #
+######################
+._*
+.Apple*
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+/nbproject
