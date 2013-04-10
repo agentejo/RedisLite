@@ -89,19 +89,28 @@ class RedisLite {
      * @param  string $pattern
      * @return array
      */
-    public function keys($pattern) {
+    public function keys($pattern = null) {
 
-        $keys    = array();
-        $matcher = function_exists('fnmatch') ? 'fnmatch': function($pattern, $string){
-            return preg_match("#^".strtr(preg_quote($pattern, '#'), array('\*' => '.*', '\?' => '.'))."$#i", $string);
-        };
-
+        $keys = array();
         $stmt = $this->connection->query("SELECT `key` FROM storage ORDER BY `key`;");
         $res  = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach ($res as $record) {
-            if($matcher($pattern, $record["key"])) {
+        if (!$pattern) {
+
+            foreach ($res as $record) {
                 $keys[] = $record["key"];
+            }
+
+        } else {
+
+            $matcher = function_exists('fnmatch') ? 'fnmatch': function($pattern, $string){
+                return preg_match("#^".strtr(preg_quote($pattern, '#'), array('\*' => '.*', '\?' => '.'))."$#i", $string);
+            };
+
+            foreach ($res as $record) {
+                if($matcher($pattern, $record["key"])) {
+                    $keys[] = $record["key"];
+                }
             }
         }
 
