@@ -35,7 +35,7 @@ A simple storage class inspired by the redis api on top of Sqlite.
 
 ## implemented methods
 
-    set, get, exists, del, type, incr, decr, 
+    set, get, exists, keys, del, type, incr, decr, 
     llen, lpush, rpush, lset, lindex,
     hset, hget, hgetall, hexists, hkeys, hvals, hlen, hincrby, hmset, hmget
     

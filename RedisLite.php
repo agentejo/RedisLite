@@ -84,6 +84,31 @@ class RedisLite {
     }
 
     /**
+     * Get all keys matching a pattern
+     * 
+     * @param  string $pattern
+     * @return array
+     */
+    public function keys($pattern) {
+
+        $keys    = array();
+        $matcher = function_exists('fnmatch') ? 'fnmatch': function($pattern, $string){
+            return preg_match("#^".strtr(preg_quote($pattern, '#'), array('\*' => '.*', '\?' => '.'))."$#i", $string);
+        };
+
+        $stmt = $this->connection->query("SELECT `key` FROM storage ORDER BY `key`;");
+        $res  = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($res as $record) {
+            if($matcher($pattern, $record["key"])) {
+                $keys[] = $record["key"];
+            }
+        }
+
+        return $keys;
+    }
+
+    /**
      * Delete Key(s)
      * 
      * @param  string $key
