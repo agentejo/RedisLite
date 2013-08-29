@@ -130,7 +130,7 @@ class RedisLite {
 
         foreach ($keys as $key) {
             $sql = 'DELETE FROM storage WHERE name = "'.$key.'"';
-            $this->database->connection->exec($sql);
+            $this->connection->exec($sql);
             $removed++;
         }
 
